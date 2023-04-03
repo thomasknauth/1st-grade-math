@@ -1,0 +1,85 @@
+<html>
+  <head>
+    <style>
+      .small_input {
+          width: 50px;
+      }
+    </style>
+  </head>
+  <script>
+    function setup() {
+        var nr_tasks = document.getElementsByName('tasks-per-page')[0].value;
+
+        var body = document.getElementById('tasks');
+        body.innerHTML = '';
+
+        for (let i = 0; i < nr_tasks; i++) {
+            var lhs = document.createElement("input");
+            lhs.value = Math.floor(1 + Math.random() * 10);
+            lhs.type = "text";
+            lhs.name = i + "lhs";
+            // lhs.maxLength = '2';
+            lhs.className = 'small_input';
+            lhs.readOnly = true;
+
+            var op = document.createElement("input");
+            op.value = '+';
+            op.type = "text";
+            op.name = i + "op";
+            op.className = 'small_input';
+            op.readOnly = true;
+
+            var rhs = document.createElement("input");
+            rhs.value = Math.floor(1 + Math.random() * 10);
+            rhs.type = "text";
+            rhs.name = i + "rhs";
+            rhs.className = 'small_input';
+            rhs.readOnly = true;
+
+            body.appendChild(lhs);
+            body.appendChild(op);
+            body.appendChild(rhs);
+
+            body.insertAdjacentHTML("beforeend", "=");
+
+            var result = document.createElement("input");
+            result.value = "";
+            result.type = "text";
+            result.name = i + "result";
+            result.className = 'small_input';
+
+            body.appendChild(result);
+            body.insertAdjacentHTML("beforeend", "<br>");
+        }
+    }
+    function checkResults() {
+        var nr_tasks = document.getElementsByName('tasks-per-page')[0].value;
+
+        for (let i = 0; i < nr_tasks; i++) {
+            var result = calc(parseInt(document.getElementsByName(i+'lhs')[0].value),
+                              document.getElementsByName(i+'op')[0].value,
+                              parseInt(document.getElementsByName(i+'rhs')[0].value));
+            if (result == parseInt(document.getElementsByName(i+'result')[0].value)) {
+                color = "#00FF00";
+            } else {
+                color = "#FF0000";
+            }
+            document.getElementsByName(i+'result')[0].style.backgroundColor = color;
+        }
+    }
+    function calc(lhs, op, rhs) {
+        switch (op) {
+        case '+': return lhs + rhs;
+        case '-': return lhs - rhs;
+        case '*': return lhs * rhs;
+        case '/': return lhs / rhs;
+        }
+    }
+  </script>
+  <body onload="setup()">
+    <h1>Hello!</h1>
+    Tasks per page: <input name='tasks-per-page' value='5'/ onchange='setup()'>
+    <div id="tasks"></div>
+    <button onclick="checkResults()">Check results</button>
+  </body>
+</html>
